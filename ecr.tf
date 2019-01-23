@@ -1,11 +1,12 @@
 data "aws_caller_identity" "current" {}
 
-resource "aws_ecr_repository" "dotnetcore_starter" {
-  name = "${var.repo_name}"
+resource "aws_ecr_repository" "repos" {
+  count = "${length(var.repository_list)}"
+  name  = "${var.repo_name[count.index]}"
 }
 
-resource "aws_ecr_lifecycle_policy" "keep_most_recent_policy" {
-  repository = "${aws_ecr_repository.dotnetcore_starter.name}"
+resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
+  repository = "${aws_ecr_repository.repos.*.name}"
 
   policy = <<EOF
 {
@@ -28,7 +29,7 @@ EOF
 }
 
 resource "aws_ecr_repository_policy" "repository_policy" {
-  repository = "${aws_ecr_repository.dotnetcore_starter.name}"
+  repository = "${aws_ecr_repository.repos.*.name}"
 
   policy = <<EOF
 {
