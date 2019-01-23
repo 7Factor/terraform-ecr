@@ -12,5 +12,6 @@ variable "images_to_keep" {
 }
 
 variable "repository_list" {
+  type        = "list"
   description = "A list of repositories to create."
 }
