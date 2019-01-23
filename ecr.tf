@@ -9,6 +9,8 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
   count      = "${length(var.repository_list)}"
   repository = "${var.repository_list[count.index]}"
 
+  depends_on = ["aws_ecr_repository.repos"]
+
   policy = <<EOF
 {
     "rules": [
@@ -32,6 +34,8 @@ EOF
 resource "aws_ecr_repository_policy" "repository_policy" {
   count      = "${length(var.repository_list)}"
   repository = "${var.repository_list[count.index]}"
+
+  depends_on = ["aws_ecr_repository.repos"]
 
   policy = <<EOF
 {
