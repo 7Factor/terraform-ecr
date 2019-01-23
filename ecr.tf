@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_ecr_repository" "repos" {
   count = "${length(var.repository_list)}"
-  name  = "${var.repo_name[count.index]}"
+  name  = "${var.repository_list[count.index]}"
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
