@@ -1,9 +1,6 @@
 # ECR Repository
 
-<<<<<<< HEAD
 This tiny module allows for terraforming a list of ECR repositories with cross account pull capabilities. You can use the module as such:
-=======
-This tiny module allows for terraforming an ECR repository with cross account pull capabilities. This works well in a CI pipeline or executed manually.
 
 ## Example Usage
 
