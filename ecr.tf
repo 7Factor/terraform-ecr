@@ -6,6 +6,7 @@ resource "aws_ecr_repository" "repos" {
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
+  count      = "${length(var.repository_list)}"
   repository = "${aws_ecr_repository.repos.*.name}"
 
   policy = <<EOF
@@ -29,6 +30,7 @@ EOF
 }
 
 resource "aws_ecr_repository_policy" "repository_policy" {
+  count      = "${length(var.repository_list)}"
   repository = "${aws_ecr_repository.repos.*.name}"
 
   policy = <<EOF
