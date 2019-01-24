@@ -49,6 +49,7 @@ resource "aws_ecr_repository_policy" "repository_policy" {
             },
             "Action": [
                 "ecr:GetDownloadUrlForLayer",
+                "ecr:GetRepositoryPolicy",
                 "ecr:BatchGetImage",
                 "ecr:BatchCheckLayerAvailability"
             ]
@@ -61,6 +62,7 @@ resource "aws_ecr_repository_policy" "repository_policy" {
             },
             "Action": [
                 "ecr:GetDownloadUrlForLayer",
+                "ecr:GetRepositoryPolicy",
                 "ecr:BatchGetImage",
                 "ecr:BatchCheckLayerAvailability"
             ]
