@@ -45,19 +45,7 @@ resource "aws_ecr_repository_policy" "repository_policy" {
             "Sid": "AllowCrossAccountPull",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::${var.dev_account_id}:root"
-            },
-            "Action": [
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetRepositoryPolicy",
-                "ecr:BatchGetImage",
-                "ecr:BatchCheckLayerAvailability"
-            ]
-        },
-        {
-            "Sid": "AllowCrossAccountPull",
-            "Effect": "Allow",
-            "Principal": {
+                "AWS": "arn:aws:iam::${var.dev_account_id}:root",
                 "AWS": "arn:aws:iam::${var.prod_account_id}:root"
             },
             "Action": [
