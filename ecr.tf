@@ -49,7 +49,7 @@ resource "aws_ecr_repository_policy" "repository_policy" {
             "Sid": "AllowCrossAccountPull",
             "Effect": "Allow",
             "Principal": {
-                ${jsonencode(join(",", local.principal_list))}
+                ${join(",", local.principal_list)}
             },
             "Action": [
                 "ecr:GetDownloadUrlForLayer",
