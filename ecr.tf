@@ -80,7 +80,6 @@ resource "aws_ecr_repository_policy" "policy" {
          length(var.pull_account_list) == 0 ? "" : data.template_file.pull_allowed_policy.rendered,
          length(var.push_account_list) == 0 ? "" : data.template_file.push_allowed_policy.rendered
         )))}
-       }
     ]
 }
 EOF
