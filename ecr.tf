@@ -32,7 +32,7 @@ EOF
 }
 
 resource "template_file" "account_template" {
-  count = "${length(var.accounts)}"
+  count = "${length(var.account_list)}"
 
   template = <<EOF
 
@@ -41,7 +41,7 @@ resource "template_file" "account_template" {
 EOF
 
   vars {
-    account_id = "${var.accounts[count.index]}"
+    account_id = "${var.account_list[count.index]}"
   }
 }
 

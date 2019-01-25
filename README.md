@@ -9,8 +9,7 @@ module "ecr_repo" {
   source            = "github.com/7factor/terraform-ecr"
 
   repository_list   = ["repo-a", "repo-b"]
-  prod_account_id   = 1234567890
-  dev_account_id    = 0987654321
+  account_list		= [1234567890, 0987654321]
 }
 ```
 

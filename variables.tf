@@ -1,4 +1,4 @@
-variable "accounts" {
+variable "account_list" {
   type        = "list"
   description = "The list of accounts to give access to each repository. All or none."
 }
