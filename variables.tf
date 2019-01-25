@@ -1,9 +1,6 @@
-variable "dev_account_id" {
-  description = "Account ID for the development account. Allows cross account pulls."
-}
-
-variable "prod_account_id" {
-  description = "Account ID for the production account. Allows cross account pulls."
+variable "accounts" {
+  type        = "list"
+  description = "The list of accounts to give access to each repository. All or none."
 }
 
 variable "images_to_keep" {
