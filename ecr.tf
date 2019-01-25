@@ -31,6 +31,10 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
 EOF
 }
 
+locals {
+  principal_list = "${formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.account_list)}"
+}
+
 resource "aws_ecr_repository_policy" "repository_policy" {
   count      = "${length(var.repository_list)}"
   repository = "${var.repository_list[count.index]}"
@@ -45,7 +49,7 @@ resource "aws_ecr_repository_policy" "repository_policy" {
             "Sid": "AllowCrossAccountPull",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::${var.account_list[0]}:root"
+                ${jsonencode(join(",", local.principal_list))}
             },
             "Action": [
                 "ecr:GetDownloadUrlForLayer",
