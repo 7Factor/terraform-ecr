@@ -29,36 +29,44 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
 EOF
 }
 
-# Black voodoo magic nonsense. I can't believe I figured this out.
-resource "aws_ecr_repository_policy" "push_allowed_repo_policy" {
-  count      = "${length(var.push_account_list) > 0 ? length(var.repository_list) : 0}"
-  repository = "${var.repository_list[count.index]}"
-
-  depends_on = ["aws_ecr_repository.repos"]
-
-  policy = <<EOF
+data "template_file" "push_allowed_policy" {
+  template = <<EOF
 {
-    "Version": "2008-10-17",
-    "Statement": [
-        {
-            "Sid": "AllowCrossAccountPush",
-            "Effect": "Allow",
-            "Principal": {
-                ${join(",", formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.push_account_list))}
-            },
-            "Action": [
-                "ecr:PutImage",
-                "ecr:InitiateLayerUpload",
-                "ecr:UploadLayerPart",
-                "ecr:CompleteLayerUpload"
-            ]
-        }
+    "Sid": "AllowCrossAccountPush",
+    "Effect": "Allow",
+    "Principal": {
+        ${join(",", formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.push_account_list))}
+    },
+    "Action": [
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload"
     ]
 }
 EOF
 }
 
-resource "aws_ecr_repository_policy" "pull_allowed_repo_policy" {
+data "template_file" "pull_allowed_policy" {
+  template = <<EOF
+{
+    "Sid": "AllowCrossAccountPull",
+    "Effect": "Allow",
+    "Principal": {
+        ${join(",", formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.pull_account_list))}
+    },
+    "Action": [
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetRepositoryPolicy",
+        "ecr:BatchGetImage",
+        "ecr:BatchCheckLayerAvailability"
+    ]
+}
+EOF
+}
+
+# This is the stupidest terraform I've ever had to write. Good lord kill me.
+resource "aws_ecr_repository_policy" "policy" {
   count      = "${length(var.repository_list)}"
   repository = "${var.repository_list[count.index]}"
 
@@ -68,19 +76,11 @@ resource "aws_ecr_repository_policy" "pull_allowed_repo_policy" {
 {
     "Version": "2008-10-17",
     "Statement": [
-        {
-            "Sid": "AllowCrossAccountPull",
-            "Effect": "Allow",
-            "Principal": {
-                ${join(",", formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.pull_account_list))}
-            },
-            "Action": [
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetRepositoryPolicy",
-                "ecr:BatchGetImage",
-                "ecr:BatchCheckLayerAvailability"
-            ]
-        }
+      ${join(",", compact(list(
+         length(var.pull_account_list) == 0 ? "" : data.template_file.pull_allowed_policy.rendered,
+         length(var.push_account_list) == 0 ? "" : data.template_file.push_allowed_policy.rendered
+        )))}
+       }
     ]
 }
 EOF
