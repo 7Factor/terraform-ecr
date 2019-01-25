@@ -53,16 +53,6 @@ resource "aws_ecr_repository_policy" "repository_policy" {
                 "ecr:BatchGetImage",
                 "ecr:BatchCheckLayerAvailability"
             ]
-        },
-        {
-            "Sid": "AllowAll",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-            },
-            "Action": [
-                "ecr:*"
-            ]
         }
     ]
 }
