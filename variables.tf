@@ -1,6 +1,12 @@
-variable "account_list" {
+variable "pull_account_list" {
   type        = "list"
-  description = "The list of accounts to give access to each repository. All or none."
+  description = "The list of accounts to give pull access to each repository."
+}
+
+variable "push_account_list" {
+  type        = "list"
+  default     = []
+  description = "The list of accounts to give push access to each repository. Defaults to nothing, use this in case you're pushing images from a foreign account into the target account containing the ECR repos."
 }
 
 variable "images_to_keep" {
