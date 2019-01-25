@@ -31,7 +31,7 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
 EOF
 }
 
-resource "template_file" "account_template" {
+data "template_file" "account_template" {
   count = "${length(var.account_list)}"
 
   template = <<EOF
