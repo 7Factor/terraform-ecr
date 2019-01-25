@@ -31,20 +31,6 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
 EOF
 }
 
-data "template_file" "account_template" {
-  count = "${length(var.account_list)}"
-
-  template = <<EOF
-
-  "AWS": "arn:aws:iam::$${account_id}:root",
-
-EOF
-
-  vars {
-    account_id = "${var.account_list[count.index]}"
-  }
-}
-
 resource "aws_ecr_repository_policy" "repository_policy" {
   count      = "${length(var.repository_list)}"
   repository = "${var.repository_list[count.index]}"
@@ -59,7 +45,11 @@ resource "aws_ecr_repository_policy" "repository_policy" {
             "Sid": "AllowCrossAccountPull",
             "Effect": "Allow",
             "Principal": {
-                ${template_file.account_template.rendered}
+                ${jsonencode(
+                    join(",", 
+                      formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.account_list)
+                    )
+                )}
             },
             "Action": [
                 "ecr:GetDownloadUrlForLayer",
