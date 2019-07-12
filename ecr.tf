@@ -1,6 +1,10 @@
+terraform {
+  required_version = ">=0.12.3"
+}
+
 resource "aws_ecr_repository" "repos" {
-  count = "${length(var.repository_list)}"
-  name  = "${var.repository_list[count.index]}"
+  count = length(var.repository_list)
+  name  = var.repository_list[count.index]
 
   # due to a bug with terraform, when we pass in our list of repos to create, if the order changes terraform will not
   # update them in place, but will instead destroy them. Not a happy time if you have images your production env relies on.
@@ -11,8 +15,8 @@ resource "aws_ecr_repository" "repos" {
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
-  count      = "${length(var.repository_list)}"
-  repository = "${var.repository_list[count.index]}"
+  count      = length(var.repository_list)
+  repository = var.repository_list[count.index]
 
   depends_on = ["aws_ecr_repository.repos"]
 
@@ -74,8 +78,8 @@ EOF
 
 # This is the stupidest terraform I've ever had to write. Good lord kill me.
 resource "aws_ecr_repository_policy" "policy" {
-  count      = "${length(var.repository_list)}"
-  repository = "${var.repository_list[count.index]}"
+  count      = length(var.repository_list)
+  repository = var.repository_list[count.index]
 
   depends_on = ["aws_ecr_repository.repos"]
 
