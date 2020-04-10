@@ -15,8 +15,8 @@ resource "aws_ecr_repository" "repos" {
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
-  count      = length(var.repository_list)
-  repository = var.repository_list[count.index]
+  for_each   = var.repository_list
+  repository = each.value
 
   depends_on = [aws_ecr_repository.repos]
 
@@ -78,8 +78,8 @@ EOF
 
 # This is the stupidest terraform I've ever had to write. Good lord kill me.
 resource "aws_ecr_repository_policy" "policy" {
-  count      = length(var.repository_list)
-  repository = var.repository_list[count.index]
+  for_each   = var.repository_list
+  repository = each.value
 
   depends_on = [aws_ecr_repository.repos]
 
