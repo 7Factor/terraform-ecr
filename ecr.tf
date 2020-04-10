@@ -3,8 +3,8 @@ terraform {
 }
 
 resource "aws_ecr_repository" "repos" {
-  count = length(var.repository_list)
-  name  = var.repository_list[count.index]
+  for_each = var.repository_list
+  name     = each.value
 
   # due to a bug with terraform, when we pass in our list of repos to create, if the order changes terraform will not
   # update them in place, but will instead destroy them. Not a happy time if you have images your production env relies on.
@@ -88,9 +88,9 @@ resource "aws_ecr_repository_policy" "policy" {
     "Version": "2008-10-17",
     "Statement": [
       ${join(",", compact(list(
-         length(var.pull_account_list) == 0 ? "" : data.template_file.pull_allowed_policy.rendered,
-         length(var.push_account_list) == 0 ? "" : data.template_file.push_allowed_policy.rendered
-        )))}
+  length(var.pull_account_list) == 0 ? "" : data.template_file.pull_allowed_policy.rendered,
+  length(var.push_account_list) == 0 ? "" : data.template_file.push_allowed_policy.rendered
+)))}
     ]
 }
 EOF
