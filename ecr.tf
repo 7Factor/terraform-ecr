@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">=0.12.3"
+  required_version = ">=0.12.24"
 }
 
 resource "aws_ecr_repository" "repos" {
