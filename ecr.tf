@@ -5,13 +5,6 @@ terraform {
 resource "aws_ecr_repository" "repos" {
   for_each = var.repository_list
   name     = each.value
-
-  # due to a bug with terraform, when we pass in our list of repos to create, if the order changes terraform will not
-  # update them in place, but will instead destroy them. Not a happy time if you have images your production env relies on.
-  # terraform will obviously err with this block in place, but this is preferred to losing all of our images.
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
