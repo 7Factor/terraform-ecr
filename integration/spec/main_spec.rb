@@ -1,9 +1,9 @@
-require 'awspec'
+require './spec_helper'
 
-describe ecr_repository('integration-test-repo-1') do
+describe ecr_repository(TFVARS['repository_list'][0]) do
   it { should exist }
 end
 
-describe ecr_repository('integration-test-repo-2') do
+describe ecr_repository(TFVARS['repository_list'][1]) do
   it { should exist }
 end
