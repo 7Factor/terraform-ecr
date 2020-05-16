@@ -1,7 +1,7 @@
 require 'awspec'
-require 'rhcl'
+require 'hcl/checker'
 
-TFVARS = Rhcl.parse(File.open('testing.tfvars').read())
+TFVARS = HCL::Checker.parse(File.open('testing.tfvars').read())
 
 describe ecr_repository(TFVARS['repository_list'][0]) do
   it { should exist }
