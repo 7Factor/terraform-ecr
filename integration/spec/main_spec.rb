@@ -1,4 +1,7 @@
-require './spec_helper'
+require 'awspec'
+require 'rhcl'
+
+TFVARS = Rhcl.parse(File.open('testing.tfvars').read())
 
 describe ecr_repository(TFVARS['repository_list'][0]) do
   it { should exist }
