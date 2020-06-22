@@ -39,7 +39,7 @@ data "template_file" "push_allowed_policy" {
     "Sid": "AllowCrossAccountPush",
     "Effect": "Allow",
     "Principal": {
-        ${join(",", formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.push_account_list))}
+        "AWS": ${formatlist("\"arn:aws:iam::%s:root\"", var.push_account_list)}
     },
     "Action": [
         "ecr:PutImage",
@@ -57,7 +57,7 @@ data "template_file" "pull_allowed_policy" {
     "Sid": "AllowCrossAccountPull",
     "Effect": "Allow",
     "Principal": {
-        ${join(",", formatlist("\"AWS\": \"arn:aws:iam::%s:root\"", var.pull_account_list))}
+        "AWS": ${formatlist("\"arn:aws:iam::%s:root\"", var.pull_account_list)}
     },
     "Action": [
         "ecr:GetDownloadUrlForLayer",
