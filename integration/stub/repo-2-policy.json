@@ -1,0 +1,18 @@
+{
+  "Version" : "2008-10-17",
+  "Statement" : [ {
+    "Sid" : "AllowCrossAccountPull",
+    "Effect" : "Allow",
+    "Principal" : {
+      "AWS" : "arn:aws:iam::964357038409:root"
+    },
+    "Action" : [ "ecr:GetDownloadUrlForLayer", "ecr:GetRepositoryPolicy", "ecr:BatchGetImage", "ecr:BatchCheckLayerAvailability" ]
+  }, {
+    "Sid" : "AllowCrossAccountPush",
+    "Effect" : "Allow",
+    "Principal" : {
+      "AWS" : "arn:aws:iam::194500246989:root"
+    },
+    "Action" : [ "ecr:PutImage", "ecr:InitiateLayerUpload", "ecr:UploadLayerPart", "ecr:CompleteLayerUpload" ]
+  } ]
+}
